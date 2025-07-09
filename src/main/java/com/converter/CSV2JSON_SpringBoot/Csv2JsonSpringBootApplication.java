@@ -10,6 +10,4 @@ public class Csv2JsonSpringBootApplication {
 		SpringApplication.run(Csv2JsonSpringBootApplication.class, args);
 	}
 
-
-
 }

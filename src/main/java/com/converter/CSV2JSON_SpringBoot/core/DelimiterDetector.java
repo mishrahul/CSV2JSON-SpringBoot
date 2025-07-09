@@ -1,17 +1,21 @@
 package com.converter.CSV2JSON_SpringBoot.core;
 
+import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
+@Component
 public class DelimiterDetector {
 
-    public char detect(MultipartFile file) throws IOException {
+    public char detect(Path tempFile) throws IOException {
 
         char illegalDelimiter = 'x';
-        BufferedReader reader = new BufferedReader(new InputStreamReader(file.getInputStream()));
+        BufferedReader reader = Files.newBufferedReader(tempFile);
 
         String line = reader.readLine();
         if(!(line==null)) {
