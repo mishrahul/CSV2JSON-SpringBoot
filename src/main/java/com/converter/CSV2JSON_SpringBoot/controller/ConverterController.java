@@ -22,19 +22,11 @@ public class ConverterController {
 
     @PostMapping("/convert")
     public ResponseEntity<String> convertCSV(@RequestParam(value = "pretty", defaultValue = "true") boolean pretty,
-                                            @RequestParam("file") MultipartFile file) {
-
-        try {
-            String json = service.convert(pretty, file);
-            System.out.println(json);
-            return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(json);
-        }
-        catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        }
+                                            @RequestParam("file") MultipartFile file) throws IOException {
 
 
+        String json = service.convert(pretty, file);
+        return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(json);
 
-        //return new ResponseEntity<>(HttpStatus.OK);
     }
 }
