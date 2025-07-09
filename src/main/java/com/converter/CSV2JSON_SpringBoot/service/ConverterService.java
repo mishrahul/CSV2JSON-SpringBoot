@@ -30,11 +30,14 @@ public class ConverterService {
 
 
     public String convert(boolean pretty, MultipartFile file) throws IOException {
+
         if(file.getContentType()==null) throw  new NoSuchFileException("No input file attached");
 
-        if(file.isEmpty()) throw new IllegalArgumentException("Attached file might be empty");
 
         if(!(file.getContentType().equals("text/csv"))) throw new IllegalArgumentException("Attached file is not a valid CSV file");
+
+
+        if(file.isEmpty()) throw new IllegalArgumentException("Attached file might be empty");
 
         Path tempInputFile = Files.createTempFile("input", ".csv");
         file.transferTo(tempInputFile.toFile());
@@ -42,12 +45,8 @@ public class ConverterService {
 
         String json;
 
-        //boolean isValid = validator.isValidCSVFile(tempInputFile);
-
-       // if(isValid) {
             char delimiter = detector.detect(tempInputFile);
             if(delimiter == 'x') throw new IllegalArgumentException("Invalid delimiter found in the input file");
-
 
             converter.buildJSON(tempInputFile, tempOutputFile, pretty, delimiter);
 
@@ -57,15 +56,6 @@ public class ConverterService {
             Files.delete(tempOutputFile);
 
             return json;
-
-
-       // } else throw new RuntimeException("The input file is not a valid .csv file");
-
-
     }
 
-//    private void buildJSON(Path tempInputFile, Path tempOutputFile, boolean pretty, char delimiter) throws IOException {
-//
-//
-//    }
 }

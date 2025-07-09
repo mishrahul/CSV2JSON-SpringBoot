@@ -19,11 +19,14 @@ public class ConverterController {
     @Autowired
     ConverterService service;
 
+    public ConverterController(ConverterService service) {
+        this.service = service;
+    }
+
 
     @PostMapping("/convert")
     public ResponseEntity<String> convertCSV(@RequestParam(value = "pretty", defaultValue = "true") boolean pretty,
                                             @RequestParam("file") MultipartFile file) throws IOException {
-
 
         String json = service.convert(pretty, file);
         return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(json);
