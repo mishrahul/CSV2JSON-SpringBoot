@@ -43,7 +43,10 @@ public class BuilderTest {
         builder.buildJSON(tempInputFile, tempOutputFile, true, ',');
 
         String jsonOutput = Files.readString(tempOutputFile);
-        String expectedJson = "[ {\r\n  \"Name\" : \"John\",\r\n  \"Age\" : \"30\"\r\n} ]";
+        String expectedJson = "[ {\r\n  " +
+                                "\"Name\" : \"John\"," +
+                                "\r\n  \"Age\" : \"30\"" +
+                                "\r\n} ]";
         assertEquals(expectedJson, jsonOutput);
     }
 
@@ -61,13 +64,13 @@ public class BuilderTest {
 
     @Test
     void testBuildJSON_withCommaDelimiter() throws IOException {
-        String csvContent = "Header1,Header2\nValue1,Value2";
+        String csvContent = "Breed,Age\nLabrador,5";
         Files.writeString(tempInputFile, csvContent);
 
         builder.buildJSON(tempInputFile, tempOutputFile, false, ',');
 
         String jsonOutput = Files.readString(tempOutputFile);
-        assertEquals("[{\"Header1\":\"Value1\",\"Header2\":\"Value2\"}]", jsonOutput);
+        assertEquals("[{\"Breed\":\"Labrador\",\"Age\":\"5\"}]", jsonOutput);
     }
 
     @Test
@@ -105,7 +108,7 @@ public class BuilderTest {
 
     @Test
     void testBuildJSON_emptyCSV() throws IOException {
-        String csvContent = "Header1,Header2";
+        String csvContent = "";
         Files.writeString(tempInputFile, csvContent);
 
         builder.buildJSON(tempInputFile, tempOutputFile, false, ',');
@@ -133,20 +136,21 @@ public class BuilderTest {
         builder.buildJSON(tempInputFile, tempOutputFile, false, ',');
 
         String jsonOutput = Files.readString(tempOutputFile);
-        assertEquals("[{\"Name\":\"Bob\",\"Age\":\"25\"},{\"Name\":\"Charlie\",\"Age\":\"35\"}]", jsonOutput);
+        assertEquals("[{\"Name\":\"Bob\",\"Age\":\"25\"},{\"Name\":\"Charlie\",\"Age\":\"35\"}]",
+                                jsonOutput);
     }
 
     //not working
-//    @Test
-//    void testBuildJSON_ioExceptionDuringRead() throws IOException {
-//        Files.writeString(tempInputFile, "Header\nValue");
-//        Files.delete(tempInputFile);
-//
-//        IOException thrown = assertThrows(IOException.class, () -> {
-//            builder.buildJSON(tempInputFile, tempOutputFile, false, ',');
-//        });
-//
-//        assertTrue(thrown.getMessage().contains("The system cannot find the file specified") || thrown.getMessage().contains("No such file or directory"));
-//    }
+    @Test
+    void testBuildJSON_ioExceptionDuringRead() throws IOException {
+        Files.writeString(tempInputFile, "SomeHeader\nSomeValue");
+        Files.delete(tempInputFile);
+
+        IOException exception = assertThrows(IOException.class, () -> {
+            builder.buildJSON(tempInputFile, tempOutputFile, false, ',');
+        });
+
+        assertTrue(exception.getMessage().contains(tempInputFile.toString()));
+    }
 
 }

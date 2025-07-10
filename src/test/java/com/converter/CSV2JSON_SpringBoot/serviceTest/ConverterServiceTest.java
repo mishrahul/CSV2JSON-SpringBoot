@@ -76,6 +76,12 @@ class ConverterServiceTest {
         verify(builder).buildJSON(any(), any(), eq(true), eq(','));
     }
 
+
+
+
+
+
+
     @Test
     void convert_noFile_throws() {
         MockMultipartFile file = new MockMultipartFile("file", "test.csv", null, new byte[0]);
@@ -87,14 +93,14 @@ class ConverterServiceTest {
     void convert_notCsvFile_throws() {
         MockMultipartFile file = new MockMultipartFile("file", "test.html", "text/html", "<html></html>".getBytes());
         Exception ex = assertThrows(IllegalArgumentException.class, () -> service.convert(true, file));
-        assertTrue(ex.getMessage().contains("not a valid CSV"));
+        assertTrue(ex.getMessage().contains("Attached file is not a valid CSV file"));
     }
 
     @Test
     void convert_emptyFile_throws() {
         MockMultipartFile file = new MockMultipartFile("file", "test.csv", "text/csv", new byte[0]);
         Exception ex = assertThrows(IllegalArgumentException.class, () -> service.convert(true, file));
-        assertTrue(ex.getMessage().contains("empty"));
+        assertTrue(ex.getMessage().contains("Attached file might be empty"));
     }
 
     @Test
@@ -109,10 +115,11 @@ class ConverterServiceTest {
     @Test
     void convert_builderThrowsIOException() throws Exception {
         String csv = "Name,Age\nJohn,30";
-        MockMultipartFile file = new MockMultipartFile("file", "test.csv", "text/csv", csv.getBytes());
+        MockMultipartFile file = new MockMultipartFile("file", "test.csv",
+                                                        "text/csv", csv.getBytes());
         when(detector.detect(any())).thenReturn(',');
         doThrow(new IOException("builder error")).when(builder).buildJSON(any(), any(), anyBoolean(), anyChar());
-        Exception ex = assertThrows(IOException.class, () -> service.convert(true, file));
+        Throwable ex = assertThrows(IOException.class, () -> service.convert(true, file));
         assertTrue(ex.getMessage().contains("builder error"));
     }
 }

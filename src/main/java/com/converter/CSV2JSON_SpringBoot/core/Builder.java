@@ -32,6 +32,9 @@ public class Builder {
                 .build()
                 .parse(reader);
 
+
+        //reader.close();
+
         output.writeStartArray();
         for (CSVRecord rec : parser) {
             output.writeStartObject();
