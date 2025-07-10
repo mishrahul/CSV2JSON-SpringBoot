@@ -25,15 +25,12 @@ public class Builder {
 
 
         CSVParser parser = CSVFormat.DEFAULT
-                .builder()
-                .setDelimiter(delimiter)
-                .setHeader()
-                .setSkipHeaderRecord(true)
-                .build()
-                .parse(reader);
-
-
-        //reader.close();
+                                    .builder()
+                                    .setDelimiter(delimiter)
+                                    .setHeader()
+                                    .setSkipHeaderRecord(true)
+                                    .build()
+                                    .parse(reader);
 
         output.writeStartArray();
         for (CSVRecord rec : parser) {

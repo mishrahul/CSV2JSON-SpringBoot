@@ -29,7 +29,7 @@ public class ConverterService {
     }
 
 
-    public String convert(boolean pretty, MultipartFile file) throws IOException {
+    public Path convert(boolean pretty, MultipartFile file) throws IOException {
 
         if(file.getContentType()==null) throw  new NoSuchFileException("No input file attached");
 
@@ -43,19 +43,18 @@ public class ConverterService {
         file.transferTo(tempInputFile.toFile());
         Path tempOutputFile = Files.createTempFile("output", ".json");
 
-        String json;
 
-            char delimiter = detector.detect(tempInputFile);
-            if(delimiter == 'x') throw new IllegalArgumentException("Invalid delimiter found in the input file");
+        char delimiter = detector.detect(tempInputFile);
+        if(delimiter == 'x') throw new IllegalArgumentException("Invalid delimiter found in the input file");
 
-            converter.buildJSON(tempInputFile, tempOutputFile, pretty, delimiter);
+        converter.buildJSON(tempInputFile, tempOutputFile, pretty, delimiter);
 
-            json = Files.readString(tempOutputFile);
+        //json = Files.readString(tempOutputFile);
 
-            Files.delete(tempInputFile);
-            Files.delete(tempOutputFile);
+        Files.delete(tempInputFile);
+            //Files.delete(tempOutputFile);
 
-            return json;
+        return tempOutputFile;
     }
 
 }
