@@ -50,21 +50,8 @@ A simple Spring Boot application which provides RESTful API for receiving, handl
 The applicatiion runs on the port **8080** by default and can be accessed at **https://localhost:8080/convert**
 
 
-## API Endpoints
-### To update an expense entry
-1. Endpoint: **POST /convert**
-
-2. Request Body
-  ```
-     {
-      "description": "Lunch",
-      "amount": 10.00,
-      "category": "FOOD",
-      "date": "2025-06-01"
-    }
-   ```
-
-### To retrieve expense data between two dates for a particular category
+## API 
+### To convert a CSV file into JSON 
 1. Endpoint: **POST /convert**
 
 2. Request parametes
